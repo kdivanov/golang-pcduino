@@ -20,5 +20,7 @@ func TestPin(t *testing.T) {
 	gd.SetLevel(pcduino.LOW)
 	time.Sleep(1000 * time.Millisecond)
 	gd.SetLevel(pcduino.HIGH)
+	time.Sleep(1000 * time.Millisecond)
+	gd.SetLevel(pcduino.LOW)
 	gd.Close()
 }

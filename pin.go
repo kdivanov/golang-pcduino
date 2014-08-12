@@ -10,15 +10,15 @@ import (
 	"syscall"
 )
 
-type PINMODE int
+type PINMODE string
 
 // 5 mode in GPIO pins
 const (
-	IN       PINMODE = 0
-	OUT      PINMODE = 1
-	IO_SPI   PINMODE = 2
-	IO_SPIEX PINMODE = 3
-	IO_UART  PINMODE = 3
+	IN       PINMODE = "0"
+	OUT      PINMODE = "1"
+	IO_SPI   PINMODE = "2"
+	IO_SPIEX PINMODE = "3"
+	IO_UART  PINMODE = "3"
 )
 
 type IOLEVEL string
@@ -126,7 +126,10 @@ func OpenPin(pinNum PINNUM) (gd *gpioDrive, err error) {
 
 //
 func (gd *gpioDrive) SetMode(pm PINMODE) (n int, err error) {
-	return gd.modeHandle.Write([]byte(string(pm)))
+	defer func() {
+		gd.modeHandle.Close()
+	}()
+	return gd.modeHandle.Write([]byte(pm))
 }
 
 func (gd *gpioDrive) SetLevel(il IOLEVEL) (n int, err error) {
@@ -142,7 +145,6 @@ func (gd *gpioDrive) Read(p []byte) (n int, err error) {
 
 }
 func (gd *gpioDrive) Close() error {
-	gd.modeHandle.Close()
 	err := gd.pinHandle.Close()
 	if err != nil {
 		return err
