@@ -10,6 +10,10 @@ import (
 
 const serialName string = "/dev/ttyS1"
 
+type UART interface {
+	SetupUART(int)
+}
+
 func SetupUART(baud int) (io.ReadWriteCloser, error) {
 	gd0, _ := OpenPin(GPIO0) //uart_rx
 	gd1, _ := OpenPin(GPIO1) //uart_tx
